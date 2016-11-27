@@ -5,69 +5,34 @@ This contains Objects, that is, the convoy and patrol agents as well as various 
 @author: Anay
 """
 import numpy as np
+import math
 import settings
 class agent(object):
     
-    def __init__(self,location, kind, detected):
-        self.direction= 'left';
-        self.location=location;
+    def __init__(self,x=None, y=None, kind=None, detected=None):
+        self.direction= 0       #Angle in 0-360. Standard counter clockwise measurement. Executed after move is called
+        self.x = x				# X Position
+        self.y = y				# Y Position
         self.kind=kind;
         self.detected=detected;
         
-    def setAction(self,numAction):
+    def setAction(self,numAction, new_direction):
         if numAction == 0:
             self.direction = 'stay'
-        elif numAction == 1:
-#            print'hey,told to move up'
-            self.direction = 'up'
-#            print self.direction
-        elif numAction == 2:
-            self.direction = 'down'
-        elif numAction == 3:
-            self.direction = 'left'
-        elif numAction == 4:
-            self.direction = 'right'
+        elif new_direction >=0 and new_direction < 360:
+            self.direction = new_direction
         else:
             self.direction = 'error'
             
     def move(self):
-        GRID_SIZE=settings.gridSize
-            
-        if self.kind == 'convoy':
-            if self.direction == 'left':
-                if self.location[0] > 0:
-                    self.location[0] = self.location[0] - 1
-                    
-            elif self.direction == 'right':
-                if self.location[0] < GRID_SIZE[0]-1:
-                        self.location[0] = self.location[0] + 1
-                    
-            elif self.direction == 'down':
-                if self.location[1] > 0:
-                    self.location[1] = self.location[1] - 1
-                    
-            elif self.direction == 'up':
-#                print'hey,moved up'
-                if self.location[1] < GRID_SIZE[1]-1:
-                    self.location[1] = self.location[1]+ 1
-        
-                    
-                
-        else: #It is a patrol
-            if self.direction == 'left':
-                if self.location[0] > 0:                    
-                    self.location[0] = self.location[0] - 1
-                     
-                else:
-                    self.direction = 'right'
-                    
-                    
-            elif self.direction == 'right':
-                if self.location[0] < GRID_SIZE[0]-1:
-                    self.location[0] = self.location[0] + 1
-                else:
-                    self.direction = 'left'
-                   
+        new_x = self.x + math.cos(math.radians(self.direction))
+        new_y = self.y + math.sin(math.radians(self.direction))
+
+        if new_x > 0 and new_x < 10:
+        	self.x = new_x
+        if new_y > 0 and new_y < 10:
+        	self.y = new_y
+              
                     
                 
                 
