@@ -28,6 +28,7 @@ class agent(object):
         new_x = self.x + math.cos(math.radians(self.direction))
         new_y = self.y + math.sin(math.radians(self.direction))
 
+        #TODO: Set Grid boundaries in global instead of locally here
         if new_x > 0 and new_x < 10:
         	self.x = new_x
         if new_y > 0 and new_y < 10:

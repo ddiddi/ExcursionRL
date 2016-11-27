@@ -6,17 +6,21 @@ Created on Sun Nov 13 11:17:51 2016
 """
 import time
 import numpy as np
+import math
 import random
 import matplotlib.pyplot as plt
 import settings
 
+def cal_euc_distance(x1,x2,y1,y2):
+    return math.sqrt((x2-x1)**2+(y2-y1)**2)
 
 ## Detector
 def detector(enemy,convoy):
-    
-    distVec= np.abs(enemy.location-convoy.location);        
+    distVec = cal_euc_distance(enemy.x, convoy.x, enemy.y, convoy.y)
+
+# Old code distVec= np.abs(enemy.location-convoy.location);        
 #    print np.amax(distVec)
-    if np.amax(distVec) < settings.threshold:
+    if distVec < settings.threshold:
         enemy.detected=1        
         convoy.detected=1
 #        print enemy.detected
@@ -25,7 +29,8 @@ def detector(enemy,convoy):
 ## Crasher  
 def crasher(crash, enemy, convoy):
     if crash==0:
-        if np.array_equal(enemy.location, convoy.location):
+        #TODO: Set threshold for crashing
+        if cal_euc_distance(enemy.x, convoy.x, enemy.y, convoy.y) < 2:
             crash=1        
     return crash
     
