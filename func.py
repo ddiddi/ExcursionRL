@@ -18,12 +18,9 @@ def cal_euc_distance(x1,x2,y1,y2):
 def detector(enemy,convoy):
     distVec = cal_euc_distance(enemy.x, convoy.x, enemy.y, convoy.y)
 
-# Old code distVec= np.abs(enemy.location-convoy.location);        
-#    print np.amax(distVec)
     if distVec < settings.threshold:
         enemy.detected=1        
         convoy.detected=1
-#        print enemy.detected
      
     
 ## Crasher  
@@ -33,47 +30,10 @@ def crasher(crash, enemy, convoy):
         if cal_euc_distance(enemy.x, convoy.x, enemy.y, convoy.y) < 2:
             crash=1        
     return crash
-    
-## Chase
-def chase( prevState,currConvLocation ):
-    currConv_x=currConvLocation[0]
-    currConv_y=currConvLocation[1]
-    currPat_x= (prevState%100)/10
-    currPat_y=prevState%10
-    
-
-    if currPat_x != currConv_x:
-        nextPat_x=currPat_x + np.sign(currConv_x-currPat_x);
-        nextPat_y=currPat_y;
-        
-    else:
-        nextPat_x=currPat_x;
-        nextPat_y=currPat_y + np.sign(currConv_y-currPat_y);
-    
-    nextPatLoc=np.array([nextPat_x, nextPat_y])
-        
-    return nextPatLoc
-    
-## Hash function
-def hashFunction(convoy,pat):
-    stateNum= 1000*convoy.location[0] + 100*convoy.location[1] + 10*pat.location[0] + pat.location[1]  
-    return stateNum
-    
+   
 ## Q learn    
 def Qlearn(QM,prevState,action,newState,reward):
     QM[prevState,action]=(1-settings.alpha)*QM[prevState,action] + settings.alpha*(reward + settings.gamma*np.amax(QM[newState,:]))
-    
-    
-### Convoy Movement
-#def convoyMovement(QM,prevState):
-#    maxVal=np.amax(QM[prevState,:])
-#    req_row=QM[prevState,:]
-#    idx=np.where(req_row==maxVal)
-#    idxRand=np.random.permutation(range(len(idx)))
-#    action=idxRand[0]
-#    return action
-    
-
 
 ## Patrol Movement
 def patrolMovement(enemy,convoy,prevState):
@@ -123,16 +83,5 @@ def plotter(convoy,enemy):
     plt.pause(settings.plotDelay)
 #    plt.close()
     plt.gcf().clear() 
-    
-        
-        
-    
-    
-
-    
-
-
-
-        
 
    
